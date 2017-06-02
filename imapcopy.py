@@ -15,7 +15,7 @@ import imaplib
 import logging
 import argparse
 import email
-
+import os
 
 class IMAP_Copy(object):
     source = {
@@ -184,15 +184,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('source',
                         help="Source host ex. imap.googlemail.com:993")
-    parser.add_argument('source_auth', metavar='source-auth',
-                        help="Source host authentication ex. "
-                             "username@host.de:password")
+#    parser.add_argument('source_auth', metavar='source-auth',
+#                        help="Source host authentication ex. "
+#                             "username@host.de:password")
 
     parser.add_argument('destination',
                         help="Destination host ex. imap.otherhoster.com:993")
-    parser.add_argument('destination_auth', metavar='destination-auth',
-                        help="Destination host authentication ex. "
-                             "username@host.de:password")
+#    parser.add_argument('destination_auth', metavar='destination-auth',
+#                        help="Destination host authentication ex. "
+#                             "username@host.de:password")
 
     parser.add_argument('mailboxes', type=str, nargs='+',
                         help='List of mailboxes alternate between source '
@@ -230,8 +230,11 @@ def main():
     if len(_destination) > 1:
         destination['port'] = int(_destination[1])
 
-    source_auth = tuple(args.source_auth.split(':'))
-    destination_auth = tuple(args.destination_auth.split(':'))
+#    source_auth = tuple(args.source_auth.split(':'))
+#    destination_auth = tuple(args.destination_auth.split(':'))
+
+    source_auth = tuple(os.environ['SOURCE_AUTH'].split(':'))
+    destination_auth = tuple(os.environ['DESTINATION_AUTH'].split(':'))
 
     if len(args.mailboxes) % 2 != 0:
         print "Not valid count of mailboxes!"
